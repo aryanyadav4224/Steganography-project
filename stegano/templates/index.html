@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steganography Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Steganography Tool</h1>
+        <h2>Encode</h2>
+        <form action="/encode" method="POST" enctype="multipart/form-data">
+            <label for="image">Choose an image to encode:</label>
+            <input type="file" name="image" required><br><br>
+
+            <label for="action">Select encoding type:</label><br>
+            <input type="radio" id="text" name="action" value="text" checked>
+            <label for="text">Text</label><br>
+            <input type="radio" id="file" name="action" value="file">
+            <label for="file">File</label><br><br>
+
+            <div id="text-input">
+                <label for="message">Enter text to hide:</label><br>
+                <textarea name="message" rows="4" cols="50"></textarea><br><br>
+            </div>
+
+            <div id="file-input" style="display: none;">
+                <label for="file">Choose a file to hide:</label>
+                <input type="file" name="file"><br><br>
+            </div>
+
+            <button type="submit">Encode</button>
+        </form>
+
+        <h2>Decode</h2>
+        <form action="/decode" method="POST" enctype="multipart/form-data">
+            <label for="image">Choose an image to decode:</label>
+            <input type="file" name="image" required><br><br>
+
+            <label for="action">Select decoding type:</label><br>
+            <input type="radio" id="text" name="action" value="text" checked>
+            <label for="text">Text</label><br>
+            <input type="radio" id="file" name="action" value="file">
+            <label for="file">File</label><br><br>
+
+            <button type="submit">Decode</button>
+        </form>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </div>
+    <script>
+        document.querySelectorAll('input[name="action"]').forEach((input) => {
+            input.addEventListener('change', function() {
+                if (this.value === 'text') {
+                    document.getElementById('text-input').style.display = 'block';
+                    document.getElementById('file-input').style.display = 'none';
+                } else {
+                    document.getElementById('text-input').style.display = 'none';
+                    document.getElementById('file-input').style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
